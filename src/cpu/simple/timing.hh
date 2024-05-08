@@ -296,6 +296,8 @@ class TimingSimpleCPU : public BaseSimpleCPU
 
     Fault
 
+    Fault
+
     Fault initiateMemAMO(Addr addr, unsigned size, Request::Flags flags,
                          AtomicOpFunctorPtr amo_op) override;
 
