@@ -1296,12 +1296,12 @@ def template PimMemsetDeclare {{
 
         /// Constructor.
         %(class_name)s(ExtMachInst machInst,
-            IntRegIndex _dest, IntRegIndex _size, uint8_t value);
+            RegIndex _dest, RegIndex _size, uint8_t value);
 
-        Fault execute(ExecContext *, Trace::InstRecord *) const override;
-        Fault initiateAcc(ExecContext *, Trace::InstRecord *) const override;
+        Fault execute(ExecContext *, trace::InstRecord *) const override;
+        Fault initiateAcc(ExecContext *, trace::InstRecord *) const override;
         Fault completeAcc(PacketPtr, ExecContext *,
-                          Trace::InstRecord *) const override;
+                          trace::InstRecord *) const override;
 
         void
         annotateFault(ArmFault *fault) override
@@ -1313,9 +1313,9 @@ def template PimMemsetDeclare {{
 
 def template PimMemsetConstructor {{
     %(class_name)s::%(class_name)s(ExtMachInst machInst,
-            IntRegIndex _dest, IntRegIndex _size, uint8_t value)
+            RegIndex _dest, RegIndex _size, uint8_t value)
          : %(base_class)s("%(mnemonic)s", machInst, %(op_class)s,
-                 _size, _dest, false, value)
+                 _dest, _size, false, value)
     {
         %(constructor)s;
     }
@@ -1323,7 +1323,7 @@ def template PimMemsetConstructor {{
 
 def template PimMemsetExecute {{
     Fault %(class_name)s::execute(ExecContext *xc,
-                                  Trace::InstRecord *traceData) const
+                                  trace::InstRecord *traceData) const
     {
         Addr EA;
         Fault fault = NoFault;
@@ -1337,7 +1337,7 @@ def template PimMemsetExecute {{
         }
 
         if (fault == NoFault) {
-            fault = pimMemset(xc, EA, Op2, (uint8_t)imm);
+            fault = %(inst_code)s;
         }
 
         if (fault == NoFault) {
@@ -1350,7 +1350,7 @@ def template PimMemsetExecute {{
 
 def template PimMemsetInitiateAcc {{
     Fault %(class_name)s::initiateAcc(ExecContext *xc,
-                                      Trace::InstRecord *traceData) const
+                                      trace::InstRecord *traceData) const
     {
         Addr EA;
         Fault fault = NoFault;
@@ -1364,7 +1364,7 @@ def template PimMemsetInitiateAcc {{
         }
 
         if (fault == NoFault) {
-            fault = pimMemset(xc, EA, Op2, (uint8_t)imm);
+            fault = %(inst_code)s;
         }
 
         return fault;
@@ -1373,7 +1373,7 @@ def template PimMemsetInitiateAcc {{
 
 def template PimMemsetCompleteAcc {{
     Fault %(class_name)s::completeAcc(PacketPtr pkt, ExecContext *xc,
-                                      Trace::InstRecord *traceData) const
+                                      trace::InstRecord *traceData) const
     {
         return NoFault;
     }

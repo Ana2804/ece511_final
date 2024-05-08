@@ -163,7 +163,7 @@ class ExecContext
      */
     virtual Fault pimMemset(Addr addr, std::size_t size, uint8_t value)
     {
-        panic("pimMemset() is unimplemented!\n")
+        panic("pimMemset() is unimplemented!\n");
     }
 
     /**

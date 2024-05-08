@@ -237,7 +237,7 @@ let {{
         def emit(self):
             codeBlobs = {}
             # Address computation
-            eaCode = SPAlignmentCheckCode + "EA = XBase;"
+            eaCode = "EA = XDest;"
 
             codeBlobs["ea_code"] = eaCode
 
@@ -254,11 +254,13 @@ let {{
                 fault->annotate(ArmFault::SF, false);
                 fault->annotate(ArmFault::AR, false);
             '''
-
+            codeBlobs["inst_code"] = \
+                "pimMemset(xc, EA, XBase, (uint8_t)imm);"
+            codeBlobs["op_class"] = "MemWriteOp"
             instFlags = []
 
-            iop = InstObjParams(self.mnemonic, self.class_name,
-                                "ArmISA::MemoryImm64",
+            iop = ArmInstObjParams(self.mnemonic, self.class_name,
+                                "ArmISA::MemoryImm",
                                 codeBlobs, instFlags)
 
             # templates in src/arch/arm/isa/templates/mem64.isa

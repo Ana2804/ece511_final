@@ -246,7 +246,7 @@ writeMemAtomic(XC *xc, uint8_t *mem, Addr addr,
 
 template<class XC>
 Fault
-pimMemset(XC *cx, Addr addr, std::size_t size, uint8_t value)
+pimMemset(XC *xc, Addr addr, std::size_t size, uint8_t value)
 {
     return xc->pimMemset(addr, size, value);
 }

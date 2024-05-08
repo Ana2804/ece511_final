@@ -565,10 +565,11 @@ AtomicSimpleCPU::pimMemset(Addr addr, std::size_t size, uint8_t value)
     //      (assume/assert some mechanism for this to get done in DRAM)
     // Novel component would be some sort of page-cache in the DRAM,
     //      which is not at all valid but whatever...
-    fault = thread->mmu->translateAtomic(req, thread->getTC(),
+    auto fault = thread->mmu->translateAtomic(req, thread->getTC(),
                                                  BaseMMU::Write);
 
     // Send request to DRAM
+    Packet pkt(req, Packet::makeWriteCmd(req));
     dcache_latency += sendPacket(dcachePort, &pkt);
 
 

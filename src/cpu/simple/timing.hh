@@ -294,10 +294,6 @@ class TimingSimpleCPU : public BaseSimpleCPU
                    const std::vector<bool>& byte_enable = std::vector<bool>())
         override;
 
-    Fault
-
-    Fault
-
     Fault initiateMemAMO(Addr addr, unsigned size, Request::Flags flags,
                          AtomicOpFunctorPtr amo_op) override;
 
