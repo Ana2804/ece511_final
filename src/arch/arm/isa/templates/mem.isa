@@ -1292,13 +1292,11 @@ def template LoadImmConstructor {{
 def template PimMemsetDeclare {{
     class %(class_name)s : public %(base_class)s
     {
-      protected:
-        RegIndex _dest, _offset;
       public:
 
         /// Constructor.
         %(class_name)s(ExtMachInst machInst,
-                RegIndex _dest, RegIndex _offset);
+            IntRegIndex _dest, IntRegIndex _size, uint8_t value);
 
         Fault execute(ExecContext *, Trace::InstRecord *) const override;
         Fault initiateAcc(ExecContext *, Trace::InstRecord *) const override;
@@ -1317,7 +1315,7 @@ def template PimMemsetConstructor {{
     %(class_name)s::%(class_name)s(ExtMachInst machInst,
             IntRegIndex _dest, IntRegIndex _size, uint8_t value)
          : %(base_class)s("%(mnemonic)s", machInst, %(op_class)s,
-                 _size, _dest, 0)
+                 _size, _dest, false, value)
     {
         %(constructor)s;
     }
@@ -1332,7 +1330,6 @@ def template PimMemsetExecute {{
 
         %(op_decl)s;
         %(op_rd)s;
-        unsigned memAccessFlags = %(mem_flags)s;
         %(ea_code)s;
 
         if (fault == NoFault) {
@@ -1340,8 +1337,7 @@ def template PimMemsetExecute {{
         }
 
         if (fault == NoFault) {
-            fault = pimMemset(xc, EA,
-                                   memAccessFlags, NULL);
+            fault = pimMemset(xc, EA, Op2, (uint8_t)imm);
         }
 
         if (fault == NoFault) {
@@ -1361,7 +1357,6 @@ def template PimMemsetInitiateAcc {{
 
         %(op_decl)s;
         %(op_rd)s;
-        unsigned memAccessFlags = %(mem_flags)s;
         %(ea_code)s;
 
         if (fault == NoFault) {
@@ -1369,8 +1364,7 @@ def template PimMemsetInitiateAcc {{
         }
 
         if (fault == NoFault) {
-            fault = writeMemTiming(xc, traceData, Mem, EA, memAccessFlags,
-                                   NULL);
+            fault = pimMemset(xc, EA, Op2, (uint8_t)imm);
         }
 
         return fault;

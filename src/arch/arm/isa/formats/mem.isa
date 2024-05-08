@@ -1154,3 +1154,14 @@ def format Thumb16MemLit() {{
     }
     ''' % loadImmClassName(False, True, False)
 }};
+
+def format ArmPimInst() {{
+    decode_block = '''
+    {
+        const uint8_t value = bits(machInst, 7, 0);
+        const RegIndex rd = (RegIndex)(uint32_t)RD;
+        const RegIndex rs = (RegIndex)(uint32_t)RS;
+        return new PimMemset(machInst, rd, rs, value);
+    }
+    '''
+}};
