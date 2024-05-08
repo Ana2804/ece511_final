@@ -79,6 +79,8 @@ class L2Cache(Cache):
 
     def connectMemSideBus(self, bus):
         self.mem_side = bus.cpu_side_ports
+
+
 class SystemWithTwoCPUs(m5.objects.System):
     def __init__(self):
         super().__init__()
@@ -119,6 +121,7 @@ def main():
     root = m5.objects.Root(full_system=False, system=system)
     m5.instantiate()
     m5.simulate()
+
 
 if __name__ == "__m5_main__":
     main()

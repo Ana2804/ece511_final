@@ -159,6 +159,14 @@ class ExecContext
                            const std::vector<bool>& byte_enable) = 0;
 
     /**
+     * For both modes, generate a PIM-accelerated memset
+     */
+    virtual Fault pimMemset(Addr addr, std::size_t size, uint8_t value)
+    {
+        panic("pimMemset() is unimplemented!\n")
+    }
+
+    /**
      * For atomic-mode contexts, perform an atomic AMO (a.k.a., Atomic
      * Read-Modify-Write Memory Operation)
      */

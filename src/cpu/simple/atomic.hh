@@ -166,6 +166,7 @@ class AtomicSimpleCPU : public BaseSimpleCPU
     RequestPtr data_read_req;
     RequestPtr data_write_req;
     RequestPtr data_amo_req;
+    RequestPtr data_pim_req;
 
     bool dcache_access;
     Tick dcache_latency;
@@ -242,6 +243,8 @@ class AtomicSimpleCPU : public BaseSimpleCPU
                    Addr addr, Request::Flags flags, uint64_t *res,
                    const std::vector<bool> &byte_enable=std::vector<bool>())
         override;
+
+    Fault pimMemset(Addr addr, std::size_t size, uint8_t value) override;
 
     Fault amoMem(Addr addr, uint8_t *data, unsigned size,
                  Request::Flags flags, AtomicOpFunctorPtr amo_op) override;

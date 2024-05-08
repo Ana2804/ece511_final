@@ -295,6 +295,13 @@ class SimpleExecContext : public ExecContext
     }
 
     Fault
+    pimMemset(Addr addr, std::size_t size, uint8_t value)
+        override
+    {
+        return cpu->pimMemset(addr, size, value);
+    }
+
+    Fault
     writeMem(uint8_t *data, unsigned int size, Addr addr,
              Request::Flags flags, uint64_t *res,
              const std::vector<bool>& byte_enable)

@@ -244,6 +244,13 @@ writeMemAtomic(XC *xc, uint8_t *mem, Addr addr,
     return xc->writeMem(mem, size, addr, flags, res, byte_enable);
 }
 
+template<class XC>
+Fault
+pimMemset(XC *cx, Addr addr, std::size_t size, uint8_t value)
+{
+    return xc->pimMemset(addr, size, value);
+}
+
 template <ByteOrder Order, class XC, class MemT>
 Fault
 writeMemAtomic(XC *xc, trace::InstRecord *traceData, const MemT &mem,

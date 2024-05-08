@@ -58,6 +58,7 @@ format DataOp {
                 0: ArmMultAndMultAcc::armMultAndMultAcc();
                 1: ArmSyncMem::armSyncMem();
             }
+            0xa: ArmPimInst::armPimInst();
             0xb, 0xd, 0xf: AddrMode3::addrMode3();
         }
         0: decode IS_MISC {

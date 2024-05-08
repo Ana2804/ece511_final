@@ -88,6 +88,7 @@ AtomicSimpleCPU::AtomicSimpleCPU(const BaseAtomicSimpleCPUParams &p)
     data_read_req = std::make_shared<Request>();
     data_write_req = std::make_shared<Request>();
     data_amo_req = std::make_shared<Request>();
+    data_pim_req = std::make_shared<Request>();
 }
 
 
@@ -540,6 +541,39 @@ AtomicSimpleCPU::writeMem(uint8_t *data, unsigned size, Addr addr,
 
         curr_frag_id++;
     }
+}
+
+Fault
+AtomicSimpleCPU::pimMemset(Addr addr, std::size_t size, uint8_t value)
+{
+    SimpleExecContext &t_info = *threadInfo[curThread];
+    SimpleThread *thread = t_info.thread;
+
+    // use the CPU's statically allocated write request and packet objects
+    const RequestPtr &req = data_write_req;
+    req->isPim = true;
+
+    dcache_latency = 0;
+
+    req->taskId(taskId());
+
+    // TODO: get permission bits from MMU
+    // Need to see how this factors in with faults
+    // Currently, best workaround is to translate data
+    // For our model, this is honestly enough
+    // TODO: Maybe also translate data in the next pages
+    //      (assume/assert some mechanism for this to get done in DRAM)
+    // Novel component would be some sort of page-cache in the DRAM,
+    //      which is not at all valid but whatever...
+    fault = thread->mmu->translateAtomic(req, thread->getTC(),
+                                                 BaseMMU::Write);
+
+    // Send request to DRAM
+    dcache_latency += sendPacket(dcachePort, &pkt);
+
+
+    // TODO: may need to update fault
+    return fault;
 }
 
 Fault

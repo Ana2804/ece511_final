@@ -100,6 +100,8 @@ class Request : public Extensible<Request>
     typedef uint64_t FlagsType;
     typedef uint8_t ArchFlagsType;
     typedef gem5::Flags<FlagsType> Flags;
+    bool isPim = false;
+    bool faulted = false;
 
     enum : FlagsType
     {

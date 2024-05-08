@@ -167,6 +167,14 @@ class BaseSimpleCPU : public BaseCPU
         panic("writeMem() is not implemented\n");
     }
 
+    /**
+     * For both modes, generate a PIM-accelerated memset
+     */
+    virtual Fault pimMemset(Addr addr, std::size_t size, uint8_t value)
+    {
+        panic("pimMemset() is not implemented\n");
+    }
+
     virtual Fault
     amoMem(Addr addr, uint8_t* data, unsigned size, Request::Flags flags,
             AtomicOpFunctorPtr amo_op)
